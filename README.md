@@ -1,17 +1,20 @@
-# Minimax MCP Web Search Wrapper
+# Minimax MCP Tool Wrapper
 
-A lightweight wrapper to run **MiniMax Coding Plan MCP** `web_search` from the command line.
+A lightweight wrapper to run **MiniMax Coding Plan MCP** tools from the command line.
 
 ## What this does
 
 - Starts `uvx minimax-coding-plan-mcp` over MCP stdio
-- Calls the `web_search` tool with your query
+- Calls:
+  - `web_search(query)`
+  - `understand_image(prompt, image_source)`
 - Prints JSON results
 
 ## Files
 
-- `minimax_mcp_web_search.py` — Python MCP client wrapper
-- `mcp_web_search.sh` — shell helper script
+- `minimax_mcp_web_search.py` — Python MCP client wrapper (both tools)
+- `mcp_web_search.sh` — shell helper for web search
+- `mcp_understand_image.sh` — shell helper for image understanding
 
 ## Prerequisites
 
@@ -42,32 +45,49 @@ MINIMAX_API_HOST=https://api.minimax.io
 python3 -m pip install --user --break-system-packages mcp
 ```
 
-2. Make shell wrapper executable:
+2. Make shell wrappers executable:
 
 ```bash
-chmod +x mcp_web_search.sh
+chmod +x mcp_web_search.sh mcp_understand_image.sh
 ```
 
-3. Source credentials and run:
+3. Source credentials:
 
 ```bash
 set -a
 source /home/cechinel/.openclaw/credentials/minimax_credentials
 set +a
+```
 
+## Usage
+
+### 1) Web search
+
+```bash
 ./mcp_web_search.sh "Minimax coding plan mcp documentation"
 ```
 
+### 2) Understand image
+
+```bash
+./mcp_understand_image.sh "Describe this image in one sentence" "https://picsum.photos/300/200.jpg"
+```
+
+Supports `image_source` as:
+- HTTP/HTTPS URL
+- local relative path
+- local absolute path
+
+Rules:
+- If path starts with `@`, wrapper strips it automatically.
+- Supported image formats: **JPEG, PNG, WebP**.
+
 ## Output
 
-Returns JSON with organic results, for example:
-
-- title
-- link
-- snippet
-- date (if available)
+Returns JSON/text result from MCP tool call.
 
 ## Notes
 
 - If you see `MINIMAX_API_KEY is not set`, load credentials before running.
-- This wrapper is intended as a fallback/override for environments where built-in `web_search` is unavailable.
+- If image URL format is unsupported (e.g., `.svg`), wrapper returns validation error before API call.
+- This wrapper is intended as a fallback/override for environments where built-in search is unavailable.

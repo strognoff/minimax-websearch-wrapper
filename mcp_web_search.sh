@@ -6,4 +6,4 @@ if [ "$#" -lt 1 ]; then
   exit 2
 fi
 
-python3 /home/cechinel/.openclaw/workspace/minimax_mcp_web_search.py "$*"
+python3 /home/cechinel/.openclaw/workspace/minimax_mcp_web_search.py web_search "$*"
